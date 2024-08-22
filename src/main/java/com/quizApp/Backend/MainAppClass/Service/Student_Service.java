@@ -16,7 +16,7 @@ public class Student_Service {
     public Iterable <Student> getAllStudents(){
        return  srepository.findAll();
     }
-
+  // For Saving new Student
     public void saveStudent(Student student){
          srepository.save(student);
     }
