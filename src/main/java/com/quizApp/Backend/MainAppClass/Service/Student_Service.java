@@ -12,11 +12,11 @@ import com.quizApp.Backend.MainAppClass.repository.Student_Repository;
 public class Student_Service {
     @Autowired
     Student_Repository srepository;
-    // For getting student info.
+
     public Iterable <Student> getAllStudents(){
        return  srepository.findAll();
     }
-  // For Saving
+
     public void saveStudent(Student student){
          srepository.save(student);
     }
