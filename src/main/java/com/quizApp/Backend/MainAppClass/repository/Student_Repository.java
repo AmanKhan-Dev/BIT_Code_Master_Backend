@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import com.quizApp.Backend.MainAppClass.model.Student;
 @Repository
 public interface Student_Repository extends JpaRepository<Student,String> {
-    
+    boolean existsByEmail(String email);
 }

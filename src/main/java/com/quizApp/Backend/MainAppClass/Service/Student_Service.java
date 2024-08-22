@@ -16,10 +16,14 @@ public class Student_Service {
     public Iterable <Student> getAllStudents(){
        return  srepository.findAll();
     }
-  // For Saving new Student
+  // For Saving
     public void saveStudent(Student student){
          srepository.save(student);
     }
+    public boolean existsByEmail(String email) {
+        return srepository.existsByEmail(email);
+    }
+    
 
 
 }
