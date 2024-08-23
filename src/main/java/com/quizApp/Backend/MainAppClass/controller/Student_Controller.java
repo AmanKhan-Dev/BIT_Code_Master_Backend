@@ -17,7 +17,7 @@ import com.quizApp.Backend.MainAppClass.model.Student;
 import java.util.HashMap;
 import java.util.Map;
 
-@RequestMapping("students")
+@RequestMapping("student")
 @RestController
 public class Student_Controller {
 
