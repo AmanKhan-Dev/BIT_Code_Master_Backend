@@ -7,6 +7,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,4 +35,9 @@ public class Student {
     @NotBlank(message = "Roll Number is required")
     @Column(name = "Roll_No")
     private String roll_no;
+
+    @Size(min = 8,message = "Password Must Contain At Least 8 Characters")
+    @NotBlank(message = "Password cannot ne blank")
+    @Column(name = "password")
+    private String password;
 }
