@@ -13,6 +13,8 @@ public class Admin_Service {
     @Autowired
     Admin_Repository rrepository;
     public void saveAdmin(Admin admin){
+
+      
       rrepository.save(admin);
     }
     public boolean existsByEmail(String email) {
