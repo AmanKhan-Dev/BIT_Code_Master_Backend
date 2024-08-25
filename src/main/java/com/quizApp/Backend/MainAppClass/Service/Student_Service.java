@@ -30,6 +30,13 @@ public class Student_Service {
     public boolean existsByEmail(String email) {
         return srepository.existsByEmail(email);
     }
+
+    public boolean authenticate(String email, String rawPassword) {
+        return srepository.findByEmail(email)
+            .map(student -> passwordEncoder.matches(rawPassword, student.getPassword()))
+            .orElse(false);
+    }
+   
     
 
 

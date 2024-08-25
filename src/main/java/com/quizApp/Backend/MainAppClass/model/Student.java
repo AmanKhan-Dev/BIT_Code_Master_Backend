@@ -40,4 +40,6 @@ public class Student {
     @NotBlank(message = "Password cannot ne blank")
     @Column(name = "password")
     private String password;
+
+    
 }
