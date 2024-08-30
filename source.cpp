@@ -1,12 +1,19 @@
 #include <stdio.h>
 
 int main() {
-    printf("Even numbers from 1 to 10 are:\n");
-    for (int i = 1; i <= 10; i++) {
-        if (i % 2 == 0) {
-            printf("%d ", i);
-        }
-    }
-    printf("\n");
+    char name[100];
+    int age;
+
+    // Prompt the user for their name
+    printf("Enter your name: ");
+    fgets(name, sizeof(name), stdin);
+
+    // Prompt the user for their age
+    printf("Enter your age: ");
+    scanf("%d", &age);
+
+    // Print the greeting message
+    printf("Hello, %s! You are %d years old.\n", name, age);
+
     return 0;
 }

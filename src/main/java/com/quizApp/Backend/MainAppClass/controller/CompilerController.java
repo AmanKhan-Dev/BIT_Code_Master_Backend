@@ -5,11 +5,7 @@ import com.quizApp.Backend.MainAppClass.model.CodeRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 
 @RestController
 @RequestMapping("/api/compiler")
@@ -23,6 +19,7 @@ public class CompilerController {
     public ResponseEntity<String> compileCode(@RequestBody CodeRequest codeRequest) {
         String sourceCode = codeRequest.getSourceCode();
         String language = codeRequest.getLanguage(); // "C" or "C++"
+        String userInput = codeRequest.getUserInput(); // User input for the program
 
         try {
             // Write the source code to a file
@@ -31,9 +28,15 @@ public class CompilerController {
                 writer.write(sourceCode);
             }
 
+            // Clean up any previous output file
+            File outputFile = new File("output.exe");
+            if (outputFile.exists()) {
+                outputFile.delete();
+            }
+
             // Compile the code
             String command = language.equals("C") ? GCC_PATH : GPP_PATH;
-            ProcessBuilder compileProcessBuilder = new ProcessBuilder(command, sourceFile.getPath(), "-o", "output");
+            ProcessBuilder compileProcessBuilder = new ProcessBuilder("cmd", "/c", command, sourceFile.getPath(), "-o", "output.exe");
             Process compileProcess = compileProcessBuilder.start();
             compileProcess.waitFor();
 
@@ -50,8 +53,17 @@ public class CompilerController {
             }
 
             // Run the compiled code and capture the output
-            ProcessBuilder runProcessBuilder = new ProcessBuilder("output");
+            ProcessBuilder runProcessBuilder = new ProcessBuilder("cmd", "/c", "output.exe");
             Process runProcess = runProcessBuilder.start();
+
+            // Provide user input to the process
+            try (BufferedWriter processInputWriter = new BufferedWriter(new OutputStreamWriter(runProcess.getOutputStream()))) {
+                if (userInput != null && !userInput.isEmpty()) {
+                    processInputWriter.write(userInput);
+                    processInputWriter.flush();
+                }
+            }
+
             BufferedReader outputReader = new BufferedReader(new InputStreamReader(runProcess.getInputStream()));
             StringBuilder output = new StringBuilder();
             while ((line = outputReader.readLine()) != null) {
