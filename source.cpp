@@ -1,19 +1,20 @@
 #include <stdio.h>
 
 int main() {
-    char name[100];
-    int age;
+    int number;
+    char name[50]; // Buffer for string input
 
-    // Prompt the user for their name
+    // Prompt user for an integer
+    printf("Enter an integer: ");
+    scanf("%d", &number); // Read integer input
+
+    // Prompt user for a string
     printf("Enter your name: ");
-    fgets(name, sizeof(name), stdin);
+    scanf("%s", name); // Read string input
 
-    // Prompt the user for their age
-    printf("Enter your age: ");
-    scanf("%d", &age);
+    // Output the received data
+    printf("You entered the integer: %d\n", number);
+    printf("You entered the name: %s\n", name);
 
-    // Print the greeting message
-    printf("Hello, %s! You are %d years old.\n", name, age);
-
-    return 0;
+    return 0;daqdad
 }

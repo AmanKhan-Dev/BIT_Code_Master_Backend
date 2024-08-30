@@ -50,13 +50,10 @@ public class Student_Controller {
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
 
-        // Checking if email already exists
         if (sservice.existsByEmail(student.getEmail())) {
             response.put("email", "Email already exists");
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
-
-        // Add the student if no error arfe there
         sservice.saveStudent(student);
         response.put("message", "Student saved successfully");
         return new ResponseEntity<>(response, HttpStatus.OK);
