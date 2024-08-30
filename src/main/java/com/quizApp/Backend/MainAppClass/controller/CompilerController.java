@@ -26,19 +26,19 @@ public class CompilerController {
 
         try {
             // Write the source code to a file
-            File file = new File("source." + (language.equals("C") ? "c" : "cpp"));
-            try (FileWriter writer = new FileWriter(file)) {
+            File sourceFile = new File("source." + (language.equals("C") ? "c" : "cpp"));
+            try (FileWriter writer = new FileWriter(sourceFile)) {
                 writer.write(sourceCode);
             }
 
             // Compile the code
             String command = language.equals("C") ? GCC_PATH : GPP_PATH;
-            ProcessBuilder processBuilder = new ProcessBuilder(command, file.getPath(), "-o", "output");
-            Process process = processBuilder.start();
-            process.waitFor();
+            ProcessBuilder compileProcessBuilder = new ProcessBuilder(command, sourceFile.getPath(), "-o", "output");
+            Process compileProcess = compileProcessBuilder.start();
+            compileProcess.waitFor();
 
             // Check for compilation errors
-            BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+            BufferedReader errorReader = new BufferedReader(new InputStreamReader(compileProcess.getErrorStream()));
             StringBuilder errors = new StringBuilder();
             String line;
             while ((line = errorReader.readLine()) != null) {
@@ -49,7 +49,27 @@ public class CompilerController {
                 return ResponseEntity.badRequest().body(errors.toString());
             }
 
-            return ResponseEntity.ok("Compilation successful!");
+            // Run the compiled code and capture the output
+            ProcessBuilder runProcessBuilder = new ProcessBuilder("output");
+            Process runProcess = runProcessBuilder.start();
+            BufferedReader outputReader = new BufferedReader(new InputStreamReader(runProcess.getInputStream()));
+            StringBuilder output = new StringBuilder();
+            while ((line = outputReader.readLine()) != null) {
+                output.append(line).append("\n");
+            }
+
+            // Check for runtime errors
+            BufferedReader runErrorReader = new BufferedReader(new InputStreamReader(runProcess.getErrorStream()));
+            StringBuilder runErrors = new StringBuilder();
+            while ((line = runErrorReader.readLine()) != null) {
+                runErrors.append(line).append("\n");
+            }
+
+            if (runErrors.length() > 0) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(runErrors.toString());
+            }
+
+            return ResponseEntity.ok(output.toString());
         } catch (IOException | InterruptedException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
