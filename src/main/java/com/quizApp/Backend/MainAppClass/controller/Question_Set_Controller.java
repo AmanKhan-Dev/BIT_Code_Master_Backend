@@ -42,7 +42,7 @@ public class Question_Set_Controller {
         String errorMessage = ex.getBindingResult()
                                 .getFieldErrors()
                                 .stream()
-                                .map(fieldError -> fieldError.getField() + ": " + fieldError.getDefaultMessage())
+                                .map(fieldError -> fieldError.getDefaultMessage())
                                 .findFirst()
                                 .orElse("Invalid input");
         return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
