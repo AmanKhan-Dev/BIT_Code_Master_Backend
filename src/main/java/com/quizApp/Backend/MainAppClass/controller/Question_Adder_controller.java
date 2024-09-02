@@ -7,7 +7,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.quizApp.Backend.MainAppClass.Service.Question_Adder_Service;
 import com.quizApp.Backend.MainAppClass.model.Question_Adder;
@@ -15,7 +19,8 @@ import com.quizApp.Backend.MainAppClass.model.Question_Adder;
 
 import jakarta.validation.Valid;
 
-@Controller
+@RestController
+@RequestMapping("/codingQuestions")
 public class Question_Adder_controller {
     @Autowired
     Question_Adder_Service qService;
@@ -30,6 +35,13 @@ public class Question_Adder_controller {
             // Handle exceptions (e.g., database issues)
             return new ResponseEntity<>("Error adding question: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+
+    @PutMapping("/update")
+    public ResponseEntity<String> updateQuestion(@RequestBody Question_Adder question_Adder){
+           qService.updateQuestion(question_Adder);
+        return ResponseEntity.ok("Question updated successfully");
     }
 
     @ExceptionHandler(org.springframework.web.bind.MethodArgumentNotValidException.class)

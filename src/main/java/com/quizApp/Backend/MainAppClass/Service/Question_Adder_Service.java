@@ -14,4 +14,8 @@ public class Question_Adder_Service {
     public void insertIfNotExists(Question_Adder questionAdder) {
         repository.insertIfNotExists(questionAdder.getQuestionSetId(), questionAdder.getQuestionNo(), questionAdder.getQuestion());
     }
+
+    public void updateQuestion(Question_Adder myAdder) {
+        repository.updateQuestion(myAdder.getQuestionSetId(),myAdder.getQuestionNo(),myAdder.getQuestion());
+    }
 }

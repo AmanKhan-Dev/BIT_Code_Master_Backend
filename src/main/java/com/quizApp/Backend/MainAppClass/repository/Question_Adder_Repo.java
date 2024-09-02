@@ -15,7 +15,14 @@ public interface Question_Adder_Repo extends JpaRepository<Question_Adder, Strin
 
     @Modifying
 @Transactional
-@Query(value = "INSERT IGNORE INTO coding_questions (Question_Set_Id, Question_no, Question) VALUES (:questionSetId, :questionNo, :question)", nativeQuery = true)
+@Query(value = "INSERT IGNORE INTO coding_questions (Question_Set_Id, Question_no, Question) VALUES (:questionSetId, :questionNo, :question) ", nativeQuery = true)
 void insertIfNotExists(@Param("questionSetId") String questionSetId, @Param("questionNo") int questionNo, @Param("question") String question);
+
+
+@Modifying
+@Transactional
+@Query(value = "UPDATE coding_questions SET Question = :question WHERE Question_Set_Id = :questionSetId AND Question_no = :questionNo", nativeQuery = true)
+    void updateQuestion(@Param("questionSetId") String questionSetId, @Param("questionNo") int questionNo, @Param("question") String question);
+
 
 }

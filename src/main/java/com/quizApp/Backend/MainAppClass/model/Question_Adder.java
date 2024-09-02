@@ -22,7 +22,7 @@ public class Question_Adder {
     @Column(name = "Question_no")
     private int questionNo;
 
-    @Column(name = "Question")
+    @Column(name = "Question" ,columnDefinition = "TEXT")
     @NotBlank(message = "Question cannot be blank")
     private String question;
 
