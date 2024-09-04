@@ -47,4 +47,28 @@ public class Admin_Controller{
         response.put("message", "Admin saved successfully");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+
+
+
+
+
+    @PostMapping("/loginAdmin")
+public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, String> payload) {
+    String email = payload.get("email");
+    String password = payload.get("admin_password");
+    
+    boolean authenticated = rservice.authenticateAdmin(email, password);
+    
+    Map<String, Object> response = new HashMap<>();
+    if (authenticated) {
+        response.put("success", true);
+        response.put("message", "You are authenticated");
+        return new ResponseEntity<>(response, HttpStatus.OK); // Return 200 OK
+    } else {
+        response.put("success", false);
+        response.put("message", "Invalid email or password");
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED); // Return 401 Unauthorized
+    }
+}
 }

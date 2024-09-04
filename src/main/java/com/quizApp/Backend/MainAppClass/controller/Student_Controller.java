@@ -54,20 +54,22 @@ public class Student_Controller {
 
 
     @PostMapping("/logins")
-    public Map<String, Object> login(@RequestBody Map<String, String> payload) {
-        String email = payload.get("email");
-        String password = payload.get("password");
-        
-        boolean authenticated = sservice.authenticate(email, password);
-        
-        Map<String, Object> response = new HashMap<>();
-        if (authenticated) {
-            response.put("message","You are authenticated");
-        } else {
-            response.put("success", false);
-            response.put("message", "Invalid email or password");
-        }
-        
-        return response;
+public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, String> payload) {
+    String email = payload.get("email");
+    String password = payload.get("password");
+    
+    boolean authenticated = sservice.authenticate(email, password);
+    
+    Map<String, Object> response = new HashMap<>();
+    if (authenticated) {
+        response.put("success", true);
+        response.put("message", "Login successful");
+        return ResponseEntity.ok(response); // Return 200 OK for successful authentication
+    } else {
+        response.put("success", false);
+        response.put("message", "Invalid email or password");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response); // Return 401 Unauthorized for failed authentication
     }
+}
+
 }
