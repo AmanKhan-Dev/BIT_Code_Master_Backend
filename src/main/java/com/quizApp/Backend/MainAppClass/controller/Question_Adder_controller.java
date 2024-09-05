@@ -1,11 +1,12 @@
 package com.quizApp.Backend.MainAppClass.controller;
-
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -43,6 +44,19 @@ public class Question_Adder_controller {
            qService.updateQuestion(question_Adder);
         return ResponseEntity.ok("Question updated successfully");
     }
+
+    @GetMapping("/allCodingQuestions")
+    public ResponseEntity<List<String>> getQuestionsBySetId(
+            @RequestParam("questionSetId") String questionSetId) {
+        
+        List<String> questions = qService.getQuestionsBySetId(questionSetId);
+        if (!questions.isEmpty()) {
+            return ResponseEntity.ok(questions);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 
     @ExceptionHandler(org.springframework.web.bind.MethodArgumentNotValidException.class)
     public ResponseEntity<String> handleValidationExceptions(MethodArgumentNotValidException ex) {
