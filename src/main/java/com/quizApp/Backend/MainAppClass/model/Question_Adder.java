@@ -32,6 +32,13 @@ public class Question_Adder {
     @Column(name = "question_description", columnDefinition = "TEXT")
     private String question_description;
 
+
+    @Column(name = "test_case_input", columnDefinition = "TEXT")
+    private String test_case_input;
+
+    @Column(name = "test_case_output",columnDefinition = "TEXT")
+    private String test_case_output;
+
     public void setSerialNumber(int i) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'setSerialNumber'");

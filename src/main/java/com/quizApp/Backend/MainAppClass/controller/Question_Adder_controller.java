@@ -38,6 +38,11 @@ public class Question_Adder_controller {
         }
     }
 
+    @GetMapping("all")
+    public List<Question_Adder> getAllQuestions() {
+        return qService.getAllQuestions();
+    }
+
 
     @PutMapping("/update")
     public ResponseEntity<String> updateQuestion(@RequestBody Question_Adder question_Adder){
@@ -56,6 +61,21 @@ public class Question_Adder_controller {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("/selectedQuestion")
+public ResponseEntity<String> getQuestionBySetIdAndNo(
+        @RequestParam("questionSetId") String questionSetId,
+        @RequestParam("questionNo") int questionNo) {
+    
+    String question = qService.getQuestionBySetIdAndNo(questionSetId, questionNo);
+    
+    if (question != null) {
+        return ResponseEntity.ok(question);
+    } else {
+        return ResponseEntity.notFound().build();
+    }
+}
+
 
 
     @ExceptionHandler(org.springframework.web.bind.MethodArgumentNotValidException.class)
