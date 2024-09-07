@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -62,12 +63,12 @@ public class Question_Adder_controller {
         }
     }
 
-    @GetMapping("/selectedQuestion")
-public ResponseEntity<String> getQuestionBySetIdAndNo(
-        @RequestParam("questionSetId") String questionSetId,
-        @RequestParam("questionNo") int questionNo) {
+  @GetMapping("/questions/{questionSetId}/{questionNo}")
+public ResponseEntity<Question_Adder> getQuestionBySetIdAndNo(
+        @PathVariable("questionSetId") String questionSetId,
+        @PathVariable("questionNo") int questionNo) {
     
-    String question = qService.getQuestionBySetIdAndNo(questionSetId, questionNo);
+    Question_Adder question = qService.getQuestionBySetIdAndNo(questionSetId, questionNo);
     
     if (question != null) {
         return ResponseEntity.ok(question);
@@ -75,7 +76,6 @@ public ResponseEntity<String> getQuestionBySetIdAndNo(
         return ResponseEntity.notFound().build();
     }
 }
-
 
 
     @ExceptionHandler(org.springframework.web.bind.MethodArgumentNotValidException.class)

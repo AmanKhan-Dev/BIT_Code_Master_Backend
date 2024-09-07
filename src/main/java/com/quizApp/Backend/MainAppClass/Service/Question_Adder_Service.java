@@ -23,12 +23,12 @@ public class Question_Adder_Service {
 
 
 
-    public String getQuestionBySetIdAndNo(String questionSetId, int questionNo) {
+    public Question_Adder getQuestionBySetIdAndNo(String questionSetId, int questionNo) {
         
        Question_Adder questionEntity = repository.findByQuestionSetIdAndQuestionNo(questionSetId, questionNo);
-        
+        return questionEntity;
 
-        return (questionEntity != null) ? questionEntity.getQuestion() : null;
+        
     }
 
 

@@ -1,9 +1,16 @@
 #include <stdio.h>
 
 int main() {
-    int num1, num2, sum;
+    char name[100]; // Buffer to hold the user's name
 
-    // Read two integers from user input
-    printf("hello ");
+    // Prompt the user to enter their name
+  
+    
+    // Read the input from the user
+    
+
+    // Print the greeting message
+    printf("Hello, user");
+
     return 0;
 }
