@@ -11,6 +11,8 @@ public class CodeRequest {
     private String sourceCode;
     private String language; 
     private String userInput;
+    private String questionSetId;
+    private Integer questionNo;
 
     
 }
