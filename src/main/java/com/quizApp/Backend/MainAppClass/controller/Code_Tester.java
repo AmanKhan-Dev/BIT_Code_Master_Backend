@@ -13,7 +13,7 @@ import java.io.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/compiler")
+@RequestMapping("/compile")
 public class Code_Tester {
 
     private static final String GCC_PATH = "C:\\gcc\\bin\\gcc"; // For C

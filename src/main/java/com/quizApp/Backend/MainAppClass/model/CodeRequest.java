@@ -9,10 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CodeRequest {
     private String sourceCode;
-    private String language; 
+    private String language; // "C" or "C++"
     private String userInput;
     private String questionSetId;
     private Integer questionNo;
-
     
 }
