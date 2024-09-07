@@ -59,7 +59,7 @@ public class Code_Tester {
             }
 
             // Retrieve test cases for the given questionSetId and questionNo
-            List<TestCase> testCases = testCaseRepository.findByQuestionSetIdAndQuestionNo(questionSetId, questionNo);
+            List<TestCase> testCases = testCaseRepository.findTestCasesByQuestionSetIdAndQuestionNo(questionSetId, questionNo);
 
             StringBuilder resultBuilder = new StringBuilder();
             for (TestCase testCase : testCases) {
