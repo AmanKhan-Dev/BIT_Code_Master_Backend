@@ -30,7 +30,7 @@ public class Student {
 
     @Positive(message = "PRN should be a positive number")
     @Column(name = "PRN")
-    private long prn_no;
+    private String prn_no;
 
     @NotBlank(message = "Roll Number is required")
     @Column(name = "Roll_No")
