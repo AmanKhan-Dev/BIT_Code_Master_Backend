@@ -182,7 +182,7 @@ public ResponseEntity<String> compileCodeTest(@RequestBody CodeRequest request) 
 
         // Send appropriate response based on test results
         if (allTestsPassed) {
-            return ResponseEntity.ok("All test cases passed!");
+            return ResponseEntity.ok("All Hidden Test Cases Passed");
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(resultBuilder.toString());
         }
