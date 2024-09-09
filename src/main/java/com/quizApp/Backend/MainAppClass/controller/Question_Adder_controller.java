@@ -1,5 +1,8 @@
 package com.quizApp.Backend.MainAppClass.controller;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.quizApp.Backend.MainAppClass.Service.Question_Adder_Service;
 import com.quizApp.Backend.MainAppClass.model.Question_Adder;
-
+import com.quizApp.Backend.MainAppClass.model.Student;
 
 import jakarta.validation.Valid;
 
@@ -52,16 +55,17 @@ public class Question_Adder_controller {
     }
 
     @GetMapping("/allCodingQuestions")
-    public ResponseEntity<List<String>> getQuestionsBySetId(
-            @RequestParam("questionSetId") String questionSetId) {
-        
-        List<String> questions = qService.getQuestionsBySetId(questionSetId);
-        if (!questions.isEmpty()) {
-            return ResponseEntity.ok(questions);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+public ResponseEntity<List<Map<String, Object>>> getQuestionsBySetId(
+        @RequestParam("questionSetId") String questionSetId) {
+    
+    List<Map<String, Object>> questions = qService.getQuestionsBySetId(questionSetId);
+    if (!questions.isEmpty()) {
+        return ResponseEntity.ok(questions);
+    } else {
+        return ResponseEntity.notFound().build();
     }
+}
+
 
   @GetMapping("/questions/{questionSetId}/{questionNo}")
 public ResponseEntity<Question_Adder> getQuestionBySetIdAndNo(
@@ -76,6 +80,13 @@ public ResponseEntity<Question_Adder> getQuestionBySetIdAndNo(
         return ResponseEntity.notFound().build();
     }
 }
+
+ @GetMapping("/findByEmail")
+    public ResponseEntity<Student> findStudentByEmail(@RequestParam String email) {
+        Optional<Student> studentOptional = qService.findStudentByEmail(email);
+        return studentOptional.map(ResponseEntity::ok)
+                              .orElseGet(() -> ResponseEntity.notFound().build());
+    }
 
 
     @ExceptionHandler(org.springframework.web.bind.MethodArgumentNotValidException.class)

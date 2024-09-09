@@ -2,6 +2,8 @@ package com.quizApp.Backend.MainAppClass.Service;
 
 
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -36,7 +38,10 @@ public class Student_Service {
             .map(student -> passwordEncoder.matches(rawPassword, student.getPassword()))
             .orElse(false);
     }
-   
+     // New method to find a student by email
+     public Optional<Student> findStudentByEmail(String email) {
+        return srepository.findByEmail(email);
+    }
     
 
 

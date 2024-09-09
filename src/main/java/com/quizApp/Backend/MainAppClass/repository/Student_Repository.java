@@ -10,5 +10,5 @@ import com.quizApp.Backend.MainAppClass.model.Student;
 public interface Student_Repository extends JpaRepository<Student,String> {
     Optional<Student> findByEmail(String email);
     boolean existsByEmail(String email);
- 
+    
 }

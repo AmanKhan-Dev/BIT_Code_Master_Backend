@@ -37,7 +37,7 @@ public interface Question_Adder_Repo extends JpaRepository<Question_Adder, Strin
 
                         Question_Adder findByQuestionSetIdAndQuestionNo(String questionSetId, int questionNo);
 
-                       
-                        @Query(value = "SELECT question_no,question FROM coding_questions WHERE question_set_id = :questionSetId", nativeQuery = true)
-                        List<String> findQuestionsBySetId(@Param("questionSetId") String questionSetId);
+                        @Query(value = "SELECT question_no, question, question_category FROM coding_questions WHERE question_set_id = :questionSetId", nativeQuery = true)
+                        List<Object[]> findQuestionsBySetId(@Param("questionSetId") String questionSetId);
+                        
 }
