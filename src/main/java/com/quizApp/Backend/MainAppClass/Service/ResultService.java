@@ -11,6 +11,8 @@ import com.quizApp.Backend.MainAppClass.repository.ResultRepository;
 
 @Service
 public class ResultService {
+
+    
     @Autowired
     ResultRepository resultRepository;
 
@@ -27,6 +29,11 @@ public Result saveResult(Result result){
     resultRepository.save(result);
     return result;
 }
+
+
+
+
+
 
 
 }

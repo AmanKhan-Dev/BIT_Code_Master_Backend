@@ -12,6 +12,10 @@ import com.quizApp.Backend.MainAppClass.model.ResultId;
 public interface ResultRepository extends JpaRepository<Result,ResultId> {
     List<Result> findByEmail(String email);
 
+  
+        boolean existsByQuestionSetIdAndQuestionNoAndEmail(String questionSetId, int questionNo, String email);
+    
+    
 
 
     

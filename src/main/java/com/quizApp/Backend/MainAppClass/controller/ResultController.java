@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.quizApp.Backend.MainAppClass.Service.ResultService;
 import com.quizApp.Backend.MainAppClass.model.Result;
+import com.quizApp.Backend.MainAppClass.repository.ResultRepository;
 
 import java.util.List;
 
@@ -18,6 +19,9 @@ public class ResultController {
 
     @Autowired
     private ResultService resultService;
+
+    @Autowired
+    private ResultRepository resultRepository;
 
     @GetMapping("/email")
     public ResponseEntity<List<Result>> getResultByEmail(@RequestParam String email) {
@@ -34,6 +38,19 @@ public class ResultController {
     public ResponseEntity<Result> saveResult(@RequestBody Result result) {
         Result savedResult = resultService.saveResult(result);
         return new ResponseEntity<>(savedResult, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/exists")
+    public ResponseEntity<String> checkResultExists(
+            @RequestParam String questionSetId,
+            @RequestParam int questionNo,
+            @RequestParam String email) {
+        boolean exists = resultRepository.existsByQuestionSetIdAndQuestionNoAndEmail(questionSetId, questionNo, email);
+        if (exists) {
+            return new ResponseEntity<>("Yes it exists", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("No it does not exist", HttpStatus.NOT_FOUND);
+        }
     }
 }
 
