@@ -22,7 +22,8 @@ public class Question {
     @NotBlank
     private String questionType;
 
-
+     @Column(name = "datas" ,columnDefinition = "JSON")
+     private String datas;
     @ElementCollection
     private List<String> choices;
 
