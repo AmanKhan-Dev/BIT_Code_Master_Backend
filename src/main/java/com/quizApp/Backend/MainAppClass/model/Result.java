@@ -22,7 +22,6 @@ import lombok.NoArgsConstructor;
 public class Result {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "question_set_id")
     private String questionSetId;
 
