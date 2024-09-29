@@ -32,11 +32,11 @@ public class TestCase {
     @Id
     @Column(name = "tc_id")
     private int tcid;
-    @Column(name = "test_case_input")
+    @Column(name = "test_case_input", columnDefinition = "TEXT")
     private String testCaseInput;
 
 
-    @Column(name = "test_case_output")
+    @Column(name = "test_case_output",columnDefinition = "TEXT")
     private String testCaseOutput;
     
 }
