@@ -54,7 +54,17 @@ public class Question_Categories_service {
             return new ResponseEntity<>("Error deleting category", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
+    public ResponseEntity<List<Question_Categories>> getCategoriesByQuestionSetId(String questionSetId) {
+        try {
+            List<Question_Categories> categories = questionCategoriesRepo.findByQuestionSetId(questionSetId);
+            if (categories.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT); // No categories found
+            }
+            return new ResponseEntity<>(categories, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
 
    

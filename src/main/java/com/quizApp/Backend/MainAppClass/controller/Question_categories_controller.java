@@ -44,13 +44,9 @@ public class Question_categories_controller {
     }
 
 
-
-
-    @GetMapping("/{id}") // Endpoint to get a category by ID
-    public ResponseEntity<Question_Categories> getCategoryById(@PathVariable QuestionCategoriesId id) {
-        Iterable<Question_Categories> categoryData = repo.findAllById((Iterable<QuestionCategoriesId>) id);
-       
-            return new ResponseEntity<>( HttpStatus.OK);
-        
+    @GetMapping("/set/{question_set_id}")
+    public ResponseEntity<List<Question_Categories>> getCategoriesByQuestionSetId(@PathVariable String question_set_id) {
+        return questionCategoriesService.getCategoriesByQuestionSetId(question_set_id);
     }
+
 }
