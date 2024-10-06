@@ -29,4 +29,10 @@ public class Question_Set {
     @NotNull(message = "Set Name cannot be null")
     @Column(name = "Question_Set_Name")
     private String questionSetName;
+   
+    @Column(name = "question_set_description" ,columnDefinition = "TEXT")
+    private  String questionSetDescription;
+
+
+
 }
