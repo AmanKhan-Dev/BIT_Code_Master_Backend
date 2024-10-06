@@ -38,7 +38,7 @@ public class Question_Adder_controller {
             return new ResponseEntity<>("Error updating question: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
+ 
     @GetMapping("/get/{questionSetId}/{questionNo}")
     public ResponseEntity<Question_Adder> getQuestion(@PathVariable String questionSetId, @PathVariable int questionNo) {
         @SuppressWarnings("unchecked")
@@ -46,6 +46,23 @@ public class Question_Adder_controller {
         return question.map(ResponseEntity::ok)
                        .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
+
+
+
+    
+  @GetMapping("/questions/{questionSetId}/{questionNo}")
+  public ResponseEntity<Optional> getQuestionBySetIdAndNo(
+          @PathVariable("questionSetId") String questionSetId,
+          @PathVariable("questionNo") int questionNo) {
+      
+      Optional question = qService.getQuestionBySetIdAndNo(questionSetId, questionNo);
+      
+      if (question != null) {
+          return ResponseEntity.ok(question);
+      } else {
+          return ResponseEntity.notFound().build();
+      }
+  }
 
     @GetMapping("/all")
     public ResponseEntity<List<Question_Adder>> getAllQuestions() {
@@ -62,4 +79,7 @@ public class Question_Adder_controller {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+
+    
 }
