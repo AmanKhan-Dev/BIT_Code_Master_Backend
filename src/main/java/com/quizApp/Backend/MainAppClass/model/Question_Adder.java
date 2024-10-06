@@ -1,9 +1,6 @@
 package com.quizApp.Backend.MainAppClass.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,13 +13,8 @@ import lombok.NoArgsConstructor;
 @Table(name = "coding_questions")
 public class Question_Adder {
 
-    @Id
-    @Column(name = "Question_Set_Id")
-    @NotBlank(message = "Question Set ID must not be blank")
-    private String questionSetId;
-
-    @Column(name = "Question_no")
-    private int questionNo;
+    @EmbeddedId // Use the composite key
+    private QuestionKey id;
 
     @Column(name = "question", columnDefinition = "TEXT")
     @NotBlank(message = "Question cannot be blank")
@@ -36,7 +28,7 @@ public class Question_Adder {
 
     @Column(name = "test_case_output", columnDefinition = "TEXT")
     private String test_case_output;
-    
+
     @Column(name = "question_category")
-    private String question_category;
+    private String question_category; // Ensure this is included
 }
