@@ -12,5 +12,5 @@ import lombok.NoArgsConstructor;
 public class TestcaseId implements Serializable {
     private String questionSetId;
     private int questionNo;
-    private int tcid;
+    private String testCaseInput;
 }
