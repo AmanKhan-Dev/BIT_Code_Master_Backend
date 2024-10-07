@@ -2,6 +2,7 @@ package com.quizApp.Backend.MainAppClass.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -54,13 +55,16 @@ public class Question_Categories_service {
             return new ResponseEntity<>("Error deleting category", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    public ResponseEntity<List<Question_Categories>> getCategoriesByQuestionSetId(String questionSetId) {
+    public ResponseEntity<List<String>> getCategoriesByQuestionSetId(String questionSetId) {
         try {
             List<Question_Categories> categories = questionCategoriesRepo.findByQuestionSetId(questionSetId);
             if (categories.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT); // No categories found
             }
-            return new ResponseEntity<>(categories, HttpStatus.OK);
+            List<String> availableCategories = categories.stream()
+                    .map(cat -> cat.getId().getAvailable_category()) // Adjust this line
+                    .collect(Collectors.toList());
+            return new ResponseEntity<>(availableCategories, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }

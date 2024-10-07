@@ -45,7 +45,7 @@ public class Question_categories_controller {
 
 
     @GetMapping("/set/{question_set_id}")
-    public ResponseEntity<List<Question_Categories>> getCategoriesByQuestionSetId(@PathVariable String question_set_id) {
+    public ResponseEntity<List<String>> getCategoriesByQuestionSetId(@PathVariable String question_set_id) {
         return questionCategoriesService.getCategoriesByQuestionSetId(question_set_id);
     }
 
