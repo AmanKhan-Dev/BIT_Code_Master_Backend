@@ -79,4 +79,22 @@ public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, String
     }
 }
 
+@PostMapping("/updatePassword")
+public ResponseEntity<Map<String, String>> updatePassword(@RequestBody Map<String, String> payload) {
+    String email = payload.get("email");
+    String otp = payload.get("otp"); // Get the OTP from the request body
+    String newPassword = payload.get("newPassword");
+
+    Map<String, String> response = new HashMap<>();
+    boolean updated = sservice.updatePassword(email, otp, newPassword);
+
+    if (updated) {
+        response.put("message", "Password updated successfully");
+        return ResponseEntity.ok(response);
+    } else {
+        response.put("message", "Invalid OTP or user not found");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+}
+
 }

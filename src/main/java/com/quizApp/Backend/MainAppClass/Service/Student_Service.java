@@ -17,6 +17,9 @@ public class Student_Service {
     Student_Repository srepository;
 
     @Autowired
+    OtpService otpService;
+
+    @Autowired
     PasswordEncoder passwordEncoder;
 
     public Iterable <Student> getAllStudents(){
@@ -42,7 +45,22 @@ public class Student_Service {
      public Optional<Student> findStudentByEmail(String email) {
         return srepository.findByEmail(email);
     }
+    public boolean updatePassword(String email, String otp, String newPassword) {
+        Optional<Student> studentOptional = srepository.findByEmail(email);
+        if (studentOptional.isPresent()) {
+            Student student = studentOptional.get();
     
-
-
+            // Verify the OTP
+            if (otp.equals(otpService.getCurrentOtp())) { // Check if the provided OTP matches the stored OTP
+                String encodedNewPassword = passwordEncoder.encode(newPassword);
+                student.setPassword(encodedNewPassword);
+                srepository.save(student);
+                otpService.clearCurrentOtp(); // Clear the OTP after successful use
+                return true; // Password updated successfully
+            }
+        }
+        return false; // Password update failed
+    }
+    
+    
 }
