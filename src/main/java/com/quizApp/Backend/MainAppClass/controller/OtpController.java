@@ -14,15 +14,15 @@ public class OtpController {
 
     @PostMapping("/send")
     public String sendOtp(@RequestParam String email) {
-        // Generate OTP
+        
         String otp = otpService.generateOtp();
 
         // Send OTP via email using Brevo SMTP
         otpService.sendOtp(email, otp);
 
-        // Optionally, save the OTP in the session or database
+        
         return "OTP sent to " + email;
     }
 
-    // Add verification logic if needed
+   
 }
