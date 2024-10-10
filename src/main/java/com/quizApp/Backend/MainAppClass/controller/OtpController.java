@@ -26,11 +26,20 @@ public class OtpController {
     }
 
     @PostMapping("/verify")
-    public String verifyOtp(@RequestBody String otp) {
+    public String verifyOtp(@RequestBody Map<String, String> request) {
+        String otp = request.get("otp"); // Get the OTP from the request body
+        System.out.println("Verifying OTP: " + otp);
+        System.out.println("Current OTP: " + currentOtp);
+    
+        if (currentOtp == null) {
+            throw new RuntimeException("No OTP was generated. Please request an OTP first.");
+        }
         if (otp.equals(currentOtp)) {
             return "OTP verified successfully!";
         } else {
             throw new RuntimeException("Invalid OTP.");
         }
     }
+    
+
 }
