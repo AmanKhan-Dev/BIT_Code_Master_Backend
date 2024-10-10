@@ -37,8 +37,14 @@ public class OtpService {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("uchihaitachi39990@gmail.com");
         message.setTo(email);
-        message.setSubject("Your OTP Code");
-        message.setText("Your OTP code is: " + otp);
+        message.setSubject("Your OTP Code for Password Reset");
+        message.setText("Dear User,\n\n"
+                + "We have received a request to reset your password. "
+                + "Your One-Time Password (OTP) is:  " + otp + " .\n\n"
+                + "Please enter this OTP to proceed with resetting your password. "
+                + "This OTP is valid for a limited time only, so please use it as soon as possible.\n\n"
+                + "Thank you,\n"
+                + "--BIT CODE MASTER ");
 
         try {
             mailSender.send(message);
