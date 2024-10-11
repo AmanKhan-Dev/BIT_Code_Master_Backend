@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  quiz-website:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: quiz-website:latest
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/Quiz_Website_database
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=java.1258#
+      - SPRING_MAIL_HOST=smtp-relay.brevo.com
+      - SPRING_MAIL_PORT=587
+      - SPRING_MAIL_USERNAME=7da199001@smtp-brevo.com
+      - SPRING_MAIL_PASSWORD=NMIraqfwgKHQ8Lch
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_DATABASE: Quiz_Website_database
+      MYSQL_ROOT_PASSWORD: java.1258#
+    ports:
+      - "3306:3306"

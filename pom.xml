@@ -8,6 +8,7 @@
 		<version>3.3.2</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
+	
 	<groupId>com.quizApp.Backend</groupId>
 	<artifactId>MainAppClass</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
@@ -29,6 +30,8 @@
 	<properties>
 		<java.version>17</java.version>
 	</properties>
+
+	
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -49,7 +52,7 @@
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
-
+      
 
 		<dependency>
     <groupId>org.springframework.boot</groupId>
@@ -97,6 +100,8 @@
 				</configuration>
 			</plugin>
 		</plugins>
+
+		<finalName>spring-bcm-docker</finalName>
 	</build>
 
 </project>
