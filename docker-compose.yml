@@ -1,4 +1,4 @@
-version: '3.8'
+
 
 services:
   quiz-website:
@@ -26,4 +26,4 @@ services:
       MYSQL_DATABASE: Quiz_Website_database
       MYSQL_ROOT_PASSWORD: java.1258#
     ports:
-      - "3306:3306"
+      - "3307:3306"
