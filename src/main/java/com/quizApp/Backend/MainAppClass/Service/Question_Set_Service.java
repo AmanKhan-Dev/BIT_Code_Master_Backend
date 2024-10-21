@@ -27,7 +27,9 @@ public class Question_Set_Service {
     public Iterable <Question_Set> getAllQuestionSets(){
         return setRepository.findAll();
     }
-
+    public Question_Set getSetById(String questionSetId) {
+        return setRepository.findByQuestionSetId(questionSetId);
+    }
 
     
 }

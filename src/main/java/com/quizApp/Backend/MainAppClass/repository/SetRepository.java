@@ -5,5 +5,5 @@ import com.quizApp.Backend.MainAppClass.model.Question_Set;
 
 public interface SetRepository extends JpaRepository<Question_Set, String> {
     boolean existsByQuestionSetId(String questionSetId);
-    
+    Question_Set findByQuestionSetId(String questionSetId);
 }

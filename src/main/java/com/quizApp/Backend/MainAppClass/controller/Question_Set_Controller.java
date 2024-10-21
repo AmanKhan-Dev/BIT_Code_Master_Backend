@@ -8,6 +8,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -58,6 +59,16 @@ public class Question_Set_Controller {
     public ResponseEntity<Iterable<Question_Set>> getAllQuestions(){
         Iterable<Question_Set> question_set = setService.getAllQuestionSets();
         return ResponseEntity.ok(question_set);
+    }
+    // New endpoint to get a set by its ID
+    @GetMapping("/{questionSetId}")
+    public ResponseEntity<Question_Set> getSetById(@PathVariable String questionSetId) {
+        Question_Set questionSet = setService.getSetById(questionSetId);
+        if (questionSet != null) {
+            return ResponseEntity.ok(questionSet);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
 }
