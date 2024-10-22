@@ -146,7 +146,7 @@ public ResponseEntity<String> compileCodeTest(@RequestBody CodeRequest request) 
 
             // Run the compiled code
             ProcessBuilder runProcessBuilder = new ProcessBuilder("/bin/bash", "-c", "./output");
-            runProcessBuilder.directory(new File("/app")); // Set the working directory
+          //  runProcessBuilder.directory(new File("/app")); // Set the working directory
             Process runProcess = runProcessBuilder.start();
 
             // Provide input to the process
