@@ -80,6 +80,16 @@ public class Question_Adder_controller {
         }
     }
 
+    @GetMapping("/questionCount")
+    public ResponseEntity<List<Map<String, Object>>>  getQuestionCountBySetId(@RequestParam String questionSetId) {
+        List<Map<String, Object>> questions = qService.findQuestionCount(questionSetId);
+        if (!questions.isEmpty()) {
+            return new ResponseEntity<>(questions, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
 
     
 }

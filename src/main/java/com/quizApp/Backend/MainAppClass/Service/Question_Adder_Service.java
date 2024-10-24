@@ -20,6 +20,35 @@ public class Question_Adder_Service {
     @Autowired
     private Question_Adder_Repo repository;
 
+
+
+
+    public List<Map<String, Object>>findQuestionCount(String questionSetId) {
+        List<Object[]> results = repository.findQuestionCount(questionSetId);
+        List<Map<String, Object>> questions = new ArrayList<>();
+
+        for (Object[] result : results) {
+            Map<String, Object> questionMap = new HashMap<>();
+            questionMap.put("questionNo", result[0]);
+          
+            questions.add(questionMap);
+        }
+
+        return questions;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
     public void insertIfNotExists(Question_Adder questionAdder) {
         repository.insertIfNotExists(
             questionAdder.getId().getQuestionSetId(), 
@@ -71,4 +100,12 @@ public class Question_Adder_Service {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'findStudentByEmail'");
     }
+
+
+
+
+  
+
+
+
 }
