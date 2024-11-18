@@ -17,3 +17,5 @@ EXPOSE 8080
 
 # Set the default command to run the application
 ENTRYPOINT ["java", "-jar", "spring-bcm-docker.jar"]
+
+
