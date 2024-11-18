@@ -7,13 +7,13 @@ WORKDIR /app
 # Copy the JAR file from the local build (assumes it's in the target directory)
 COPY target/spring-bcm-docker.jar spring-bcm-docker.jar
 
-# Install gcc and g++
+# Install gcc and g++ (if necessary for your application)
 RUN apt-get update && \
-    apt-get install -y gcc g++ && \
+    apt-get install -y --no-install-recommends gcc g++ && \
     rm -rf /var/lib/apt/lists/*
 
-# Expose the application port
+# Expose the application port (Render will map it automatically)
 EXPOSE 8080
 
-# Command to run the application
+# Set the default command to run the application
 ENTRYPOINT ["java", "-jar", "spring-bcm-docker.jar"]
