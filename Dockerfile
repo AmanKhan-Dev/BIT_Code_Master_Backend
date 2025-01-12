@@ -2,7 +2,7 @@
 FROM openjdk:17-jdk-slim
 
 # Set the working directory
-WORKDIR /app
+WORKDIR /target
 
 # Copy the JAR file from the local build (assumes it's in the target directory)
 COPY target/spring-bcm-docker.jar spring-bcm-docker.jar
