@@ -2,7 +2,7 @@
 FROM openjdk:17-jdk-slim
 
 # Set the working directory
-WORKDIR /target
+WORKDIR /app
 
 # Copy the JAR file from the local build (assumes it's in the target directory)
 COPY target/spring-bcm-docker.jar spring-bcm-docker.jar
@@ -17,5 +17,3 @@ EXPOSE 8080
 
 # Set the default command to run the application
 ENTRYPOINT ["java", "-jar", "spring-bcm-docker.jar"]
-
-
