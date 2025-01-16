@@ -1,16 +1,25 @@
 package com.quizApp.Backend.MainAppClass.controller;
 
-import org.springframework.web.bind.annotation.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.quizApp.Backend.MainAppClass.model.CodeRequest;
 import com.quizApp.Backend.MainAppClass.model.TestCase;
 import com.quizApp.Backend.MainAppClass.repository.TestCaseRepository;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-
-import java.io.*;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/compiler")
@@ -37,7 +46,7 @@ public class CompilerController {
 
             // Compile
             String command = language.equals("C") ? GCC_PATH : GPP_PATH;
-            ProcessBuilder compileProcessBuilder = new ProcessBuilder("/bin/bash", "-c", command + " " + sourceFile.getPath() + " -o output");
+            ProcessBuilder compileProcessBuilder = new ProcessBuilder("/bin/sh", "-c", command + " " + sourceFile.getPath() + " -o output");
             Process compileProcess = compileProcessBuilder.start();
             
             // Capture compilation output and errors
@@ -48,7 +57,7 @@ public class CompilerController {
             }
 
             // Run the compiled code
-            ProcessBuilder runProcessBuilder = new ProcessBuilder("/bin/bash", "-c", "./output");
+            ProcessBuilder runProcessBuilder = new ProcessBuilder("/bin/sh", "-c", "./output");
             Process runProcess = runProcessBuilder.start();
             
             // Provide input to the process
@@ -145,7 +154,7 @@ public ResponseEntity<String> compileCodeTest(@RequestBody CodeRequest request) 
             String expectedOutput = testCase.getTestCaseOutput();
 
             // Run the compiled code
-            ProcessBuilder runProcessBuilder = new ProcessBuilder("/bin/bash", "-c", "./output");
+            ProcessBuilder runProcessBuilder = new ProcessBuilder("/bin/sh", "-c", "./output");
           //  runProcessBuilder.directory(new File("/app")); // Set the working directory
             Process runProcess = runProcessBuilder.start();
 
