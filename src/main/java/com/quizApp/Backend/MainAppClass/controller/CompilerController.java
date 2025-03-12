@@ -48,10 +48,10 @@ public class CompilerController {
             String command = language.equals("C") ? GCC_PATH : GPP_PATH;
             ProcessBuilder compileProcessBuilder = new ProcessBuilder("/bin/sh", "-c", command + " " + sourceFile.getPath() + " -o output");
             Process compileProcess = compileProcessBuilder.start();
-            
+
             // Capture compilation output and errors
             String compileErrors = getProcessErrorOutput(compileProcess);
-            
+
             if (compileProcess.waitFor() != 0 || !compileErrors.isEmpty()) {
                 return ResponseEntity.badRequest().body(compileErrors);
             }
@@ -59,7 +59,7 @@ public class CompilerController {
             // Run the compiled code
             ProcessBuilder runProcessBuilder = new ProcessBuilder("/bin/sh", "-c", "./output");
             Process runProcess = runProcessBuilder.start();
-            
+
             // Provide input to the process
             if (userInput != null && !userInput.isEmpty()) {
                 try (BufferedWriter processInputWriter = new BufferedWriter(new OutputStreamWriter(runProcess.getOutputStream()))) {
@@ -71,7 +71,7 @@ public class CompilerController {
             // Capture output and errors
             String output = getProcessOutput(runProcess);
             String runErrors = getProcessErrorOutput(runProcess);
-            
+
             if (runProcess.waitFor() != 0 || !runErrors.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(runErrors);
             }
@@ -107,106 +107,120 @@ public class CompilerController {
     }
 
     @PostMapping("/compileTests")
-public ResponseEntity<String> compileCodeTest(@RequestBody CodeRequest request) {
-    File sourceFile = new File("source." + (request.getLanguage().equals("C") ? "c" : "cpp"));
-    File outputFile = new File("output");
+    public ResponseEntity<String> compileCodeTest(@RequestBody CodeRequest request) {
+        File sourceFile = new File("source." + (request.getLanguage().equals("C") ? "c" : "cpp"));
+        File outputFile = new File("output.exe");
 
-    try {
-        // Create source file
-        try (FileWriter writer = new FileWriter(sourceFile)) {
-            writer.write(request.getSourceCode());
-        }
+        try {
+            // Create source file
+            try (FileWriter writer = new FileWriter(sourceFile)) {
+                writer.write(request.getSourceCode());
+            }
 
-        // Compile the source code
-        if (outputFile.exists()) {
-            outputFile.delete();
-        }
+            // Compile the source code
+            if (outputFile.exists()) {
+                outputFile.delete();
+            }
 
-        String command = request.getLanguage().equals("C") ? GCC_PATH : GPP_PATH;
-        ProcessBuilder compileProcessBuilder = new ProcessBuilder("/bin/bash", "-c", command + " " + sourceFile.getPath() + " -o " + outputFile.getPath());
-        Process compileProcess = compileProcessBuilder.start();
-        
-        // Wait for the compile process to finish
-        compileProcess.waitFor();
+            String command = request.getLanguage().equals("C") ? GCC_PATH : GPP_PATH;
+            ProcessBuilder compileProcessBuilder = new ProcessBuilder("cmd", "/c", command, sourceFile.getPath(), "-o", outputFile.getPath());
+            Process compileProcess = compileProcessBuilder.start();
+            compileProcess.waitFor();
 
-        // Capture compilation errors
-        String errors = getProcessErrorOutput(compileProcess);
+            // Capture compilation errors
+            BufferedReader errorReader = new BufferedReader(new InputStreamReader(compileProcess.getErrorStream()));
+            StringBuilder errors = new StringBuilder();
+            String line;
+            while ((line = errorReader.readLine()) != null) {
+                errors.append(line).append("\n");
+            }
 
-        if (compileProcess.exitValue() != 0 || !errors.isEmpty()) {
+            if (compileProcess.exitValue() != 0 || errors.length() > 0) {
+                sourceFile.delete();
+                if (outputFile.exists()) {
+                    outputFile.delete();
+                }
+                return ResponseEntity.badRequest().body("Compilation errors:\n" + errors.toString());
+            }
+
+            // Retrieve test cases
+            List<TestCase> testCases = testCaseRepository.findTestCasesByQuestionSetIdAndQuestionNo(request.getQuestionSetId(), request.getQuestionNo());
+
+            StringBuilder resultBuilder = new StringBuilder();
+            boolean allTestsPassed = true;
+
+            for (TestCase testCase : testCases) {
+                String input = testCase.getTestCaseInput();
+                String expectedOutput = testCase.getTestCaseOutput();
+
+                // Run the compiled code
+                ProcessBuilder runProcessBuilder = new ProcessBuilder("cmd", "/c", outputFile.getPath());
+                Process runProcess = runProcessBuilder.start();
+
+                // Provide input to the process
+                if (input != null && !input.isEmpty()) {
+                    try (BufferedWriter processInputWriter = new BufferedWriter(new OutputStreamWriter(runProcess.getOutputStream()))) {
+                        processInputWriter.write(input);
+                        processInputWriter.newLine(); // Ensure newlines are handled properly for multiple inputs
+                        processInputWriter.flush();
+                    }
+                }
+
+                // Capture the output and errors
+                BufferedReader outputReader = new BufferedReader(new InputStreamReader(runProcess.getInputStream()));
+                StringBuilder output = new StringBuilder();
+                while ((line = outputReader.readLine()) != null) {
+                    output.append(line).append("\n");
+                }
+
+                BufferedReader runErrorReader = new BufferedReader(new InputStreamReader(runProcess.getErrorStream()));
+                StringBuilder runErrors = new StringBuilder();
+                while ((line = runErrorReader.readLine()) != null) {
+                    runErrors.append(line).append("\n");
+                }
+
+                // Normalize and trim both expected and actual outputs
+                String normalizedActualOutput = output.toString()
+                        .replaceAll("\\r", "") // Remove carriage returns
+                        .replaceAll("\\s+", " ") // Collapse whitespace
+                        .trim();
+                String normalizedExpectedOutput = expectedOutput
+                        .replaceAll("\\r", "")
+                        .replaceAll("\\s+", " ")
+                        .trim();
+
+                // Check test case results
+                if (runProcess.exitValue() != 0 || runErrors.length() > 0) {
+                    resultBuilder.append("Test case failed for input: ").append(input).append("\n");
+                    resultBuilder.append("Error: ").append(runErrors).append("\n");
+                    allTestsPassed = false;
+                } else if (!normalizedActualOutput.equals(normalizedExpectedOutput)) {
+                    resultBuilder.append("Test case failed for input: ").append(input).append("\n");
+                    resultBuilder.append("Expected: ").append(normalizedExpectedOutput).append("\n");
+                    resultBuilder.append("Actual: ").append(normalizedActualOutput).append("\n");
+                    allTestsPassed = false;
+                } else {
+                    resultBuilder.append("Test case passed for input: ").append(input).append("\n");
+                }
+            }
+
+            // Clean up
             sourceFile.delete();
             if (outputFile.exists()) {
                 outputFile.delete();
             }
-            return ResponseEntity.badRequest().body("Compilation errors:\n" + errors);
-        }
 
-        // Set output file as executable
-        outputFile.setExecutable(true);
 
-        // Retrieve test cases
-        List<TestCase> testCases = testCaseRepository.findTestCasesByQuestionSetIdAndQuestionNo(request.getQuestionSetId(), request.getQuestionNo());
-
-        StringBuilder resultBuilder = new StringBuilder();
-        boolean allTestsPassed = true;
-
-        for (TestCase testCase : testCases) {
-            String input = testCase.getTestCaseInput();
-            String expectedOutput = testCase.getTestCaseOutput();
-
-            // Run the compiled code
-            ProcessBuilder runProcessBuilder = new ProcessBuilder("/bin/sh", "-c", "./output");
-          //  runProcessBuilder.directory(new File("/app")); // Set the working directory
-            Process runProcess = runProcessBuilder.start();
-
-            // Provide input to the process
-            if (input != null && !input.isEmpty()) {
-                try (BufferedWriter processInputWriter = new BufferedWriter(new OutputStreamWriter(runProcess.getOutputStream()))) {
-                    processInputWriter.write(input);
-                    processInputWriter.newLine();
-                    processInputWriter.flush();
-                }
-            }
-
-            // Wait for the run process to finish
-            runProcess.waitFor();
-
-            // Capture the output and errors
-            String output = getProcessOutput(runProcess);
-            String runErrors = getProcessErrorOutput(runProcess);
-
-            // Normalize and trim both expected and actual outputs
-            String normalizedActualOutput = output.toString().replace("\r", "").trim();
-            String normalizedExpectedOutput = expectedOutput.replace("\r", "").trim();
-
-            // Check test case results
-            if (runProcess.exitValue() != 0 || !runErrors.isEmpty()) {
-                resultBuilder.append("Test case failed for input: ").append(input).append("\n");
-                resultBuilder.append("Error: ").append(runErrors).append("\n");
-                allTestsPassed = false;
-            } else if (!normalizedActualOutput.equals(normalizedExpectedOutput)) {
-                resultBuilder.append("Test case failed for input: ").append(input).append("\n");
-                resultBuilder.append("Expected: ").append(normalizedExpectedOutput).append("\n");
-                resultBuilder.append("Actual: ").append(normalizedActualOutput).append("\n");
-                allTestsPassed = false;
+            if (allTestsPassed) {
+                return ResponseEntity.ok("All Hidden Test Cases Passed");
             } else {
-                resultBuilder.append("Test case passed for input: ").append(input).append("\n");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(resultBuilder.toString());
             }
-        }
 
-        // Clean up
-        sourceFile.delete();
-        if (outputFile.exists()) {
-            outputFile.delete();
-        }
+        } catch (IOException | InterruptedException e) {
 
-        if (allTestsPassed) {
-            return ResponseEntity.ok("All Hidden Test Cases Passed");
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(resultBuilder.toString());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal Server Error: " + e.getMessage());
         }
-
-    } catch (IOException | InterruptedException e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal Server Error: " + e.getMessage());
     }
-}
+
 }
