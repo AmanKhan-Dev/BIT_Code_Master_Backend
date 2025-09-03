@@ -84,7 +84,7 @@ public class CCodeExecutionController {
             // ✅ Get updated output
             synchronized (executionOutput) {
                 response.put("output", executionOutput.toString());
-            }
+            } 
 
         } catch (IOException e) {
             response.put("output", "❌ Input Error: " + e.getMessage());

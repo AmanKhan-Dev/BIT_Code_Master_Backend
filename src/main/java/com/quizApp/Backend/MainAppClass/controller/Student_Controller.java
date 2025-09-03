@@ -20,7 +20,7 @@ import java.util.Optional;
 
 
 
-@RequestMapping("student")
+@RequestMapping("/student")
 @RestController
 public class Student_Controller {
 
