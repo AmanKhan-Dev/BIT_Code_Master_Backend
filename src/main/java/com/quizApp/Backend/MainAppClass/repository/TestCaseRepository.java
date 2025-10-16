@@ -15,4 +15,5 @@ public interface TestCaseRepository extends JpaRepository<TestCase, TestcaseId> 
     List<TestCase> findTestCasesByQuestionSetIdAndQuestionNo(
             @Param("questionSetId") String questionSetId,
             @Param("questionNo") int questionNo);
+
 }

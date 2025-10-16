@@ -13,5 +13,6 @@ public class CodeRequest {
     private String userInput;
     private String questionSetId;
     private Integer questionNo;
+    private String problemStatement;
     
 }
