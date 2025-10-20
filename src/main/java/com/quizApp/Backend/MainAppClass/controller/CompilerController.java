@@ -34,9 +34,9 @@ public class CompilerController {
     private TestCaseRepository testCaseRepository;
 
     // Define the URLs for your AI agent endpoints
-    private static final String AI_ERROR_REVIEW_URL = "https://23deaa61c067.ngrok-free.app/error_review";
-    private static final String AI_CODE_CHECK_URL = "https://23deaa61c067.ngrok-free.app/code_check";
-    private static final String AI_CODE_IMPROVE_URL = "https://23deaa61c067.ngrok-free.app/code_improve";
+    private static final String AI_ERROR_REVIEW_URL = "https://cbd0b9c10907.ngrok-free.app/error_review";
+    private static final String AI_CODE_CHECK_URL = "https://cbd0b9c10907.ngrok-free.app/code_check";
+    private static final String AI_CODE_IMPROVE_URL = "https://cbd0b9c10907.ngrok-free.app/code_improve";
 
     private final HttpClient httpClient = HttpClient.newHttpClient();
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -49,7 +49,7 @@ public class CompilerController {
         try {
             tempDir = Files.createTempDirectory("compile-" + UUID.randomUUID());
             Path sourceFile = tempDir.resolve("source." + (request.getLanguage().equals("C") ? "c" : "cpp"));
-            Path outputFile = tempDir.resolve("output.exe");
+            Path outputFile = tempDir.resolve("output");
             Files.write(sourceFile, request.getSourceCode().getBytes());
 
             // --- Stage 1: Compilation ---
@@ -132,7 +132,7 @@ List<TestCase> testCases = testCaseRepository.findTestCasesByQuestionSetIdAndQue
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .header("Content-Type", "application/json")
-                .timeout(Duration.ofSeconds(30))
+                .timeout(Duration.ofSeconds(60))
                 .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
                 .build();
 
