@@ -39,7 +39,7 @@ public class ResultController {
     public ResponseEntity<Result> saveResult(@RequestBody Result result) {
         Result savedResult = resultService.saveResult(result);
         return new ResponseEntity<>(savedResult, HttpStatus.CREATED);
-    }
+    }   
 
     @GetMapping("/exists")
     public ResponseEntity<String> checkResultExists(
