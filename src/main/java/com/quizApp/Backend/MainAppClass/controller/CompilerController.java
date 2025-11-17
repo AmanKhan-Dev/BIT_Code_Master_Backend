@@ -34,9 +34,9 @@ public class CompilerController {
     private TestCaseRepository testCaseRepository;
 
     // Define the URLs for your AI agent endpoints
-    private static final String AI_ERROR_REVIEW_URL = "https://cbd0b9c10907.ngrok-free.app/error_review";
-    private static final String AI_CODE_CHECK_URL = "https://cbd0b9c10907.ngrok-free.app/code_check";
-    private static final String AI_CODE_IMPROVE_URL = "https://cbd0b9c10907.ngrok-free.app/code_improve";
+    private static final String AI_ERROR_REVIEW_URL = "http://54.242.206.201:8000/error_review";
+    private static final String AI_CODE_CHECK_URL = "http://54.242.206.201:8000/code_check";
+    private static final String AI_CODE_IMPROVE_URL = "http://54.242.206.201:8000/code_improve";
 
     private final HttpClient httpClient = HttpClient.newHttpClient();
     private final ObjectMapper objectMapper = new ObjectMapper();
